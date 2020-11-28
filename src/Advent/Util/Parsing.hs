@@ -2,6 +2,7 @@ module Advent.Util.Parsing (
     Parser
   , constrained
   , decimalInRange
+  , parseOrError
   ) where
 
 import Data.Void (Void)
@@ -32,3 +33,10 @@ decimalInRange minN maxN =
     (\n -> minN <= n && n <= maxN)
     ("expected integer between " ++ show minN ++ " and " ++ show maxN)
     L.decimal
+
+-- | Parses or errors (e.g. for reading input files)
+parseOrError :: Parser a -> String -> a
+parseOrError p s =
+  case parse p "" s of
+    Right result -> result
+    Left err -> error $ errorBundlePretty err
