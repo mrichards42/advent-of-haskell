@@ -22,6 +22,7 @@ dependencies:
 - containers
 - megaparsec
 - timeit
+- vector
 
 executables:
   advent-2019:

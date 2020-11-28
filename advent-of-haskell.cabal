@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: f51afec4bb9433326d8d7d023cb334ad574cf223a927176abb696b34cb50953d
+-- hash: 2b3db939e0dd200748f983b7629b1558702aa15496686eea24cfef44ee597216
 
 name:           advent-of-haskell
 version:        0.1.0.0
@@ -31,6 +31,8 @@ executable advent-2019
       Advent.Util.CLI
       Advent.Util.Parsing
       Advent.Y2019.Day01
+      Advent.Y2019.Day02
+      Advent.Y2019.IntCode
       Paths_advent_of_haskell
   hs-source-dirs:
       src
@@ -40,4 +42,5 @@ executable advent-2019
     , containers
     , megaparsec
     , timeit
+    , vector
   default-language: Haskell2010
