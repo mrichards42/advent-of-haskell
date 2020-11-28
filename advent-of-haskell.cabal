@@ -30,6 +30,7 @@ executable advent-2019
       Advent.Util.Challenge
       Advent.Util.CLI
       Advent.Util.Parsing
+      Advent.Y2019.Day01
       Paths_advent_of_haskell
   hs-source-dirs:
       src
