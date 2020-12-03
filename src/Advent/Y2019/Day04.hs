@@ -1,7 +1,7 @@
 {- Secure Container -}
 module Advent.Y2019.Day04 (part1, part2) where
 
-import Data.List (group, nub, sort)
+import Data.List (group, nub)
 
 {- Part 1
 

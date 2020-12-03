@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: a960a5a033b3f6c0b76969ed784bc433035e1c35c5c7916f21c11b75da136b5a
+-- hash: 4bd2b0e0abf20a03b6ea142d3c492378d81d1543eb2b252928a652c211518cb4
 
 name:           advent-of-haskell
 version:        0.1.0.0
@@ -34,6 +34,9 @@ executable advent-2019
       Advent.Y2019.Day02
       Advent.Y2019.Day03
       Advent.Y2019.Day04
+      Advent.Y2019.Day05
+      Advent.Y2019.Day06
+      Advent.Y2019.Day07
       Advent.Y2019.IntCode
       Paths_advent_of_haskell
   hs-source-dirs:
