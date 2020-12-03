@@ -58,7 +58,7 @@ pRule = do
   _ <- M.space
   password <- M.takeWhileP (Just "password") C.isAlpha
   _ <- M.optional M.newline
-  return $ (Rule a b letter, password)
+  return (Rule a b letter, password)
 
 parseInput :: String -> [(Rule, String)]
 parseInput = parseOrError (M.some pRule)
