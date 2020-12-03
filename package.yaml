@@ -25,8 +25,8 @@ dependencies:
 - vector
 
 executables:
-  advent-2019:
-    main:                Advent.Y2019.Main
+  advent-of-haskell:
+    main:                Advent.Main
     source-dirs:         src
     ghc-options:
     - -threaded

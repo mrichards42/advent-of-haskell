@@ -2,6 +2,7 @@ module Advent.Util.Parsing (
     Parser
   , constrained
   , decimalInRange
+  , decimalOneOf
   , parseOrError
   ) where
 
@@ -32,6 +33,14 @@ decimalInRange minN maxN =
   constrained
     (\n -> minN <= n && n <= maxN)
     ("expected integer between " ++ show minN ++ " and " ++ show maxN)
+    L.decimal
+
+-- | Parses a decimal that is one of a list of options
+decimalOneOf :: (Show a, Ord a, Num a) => [a] -> Parser a
+decimalOneOf options =
+  constrained
+    (`elem` options)
+    ("expected one of: " ++ show options)
     L.decimal
 
 -- | Parses or errors (e.g. for reading input files)

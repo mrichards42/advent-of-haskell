@@ -15,7 +15,7 @@ to one of [these][stack-error-1] [issues][stack-error-2]? So instead I'm
 running this through ghci like so:
 
 ```sh
-echo ":main all\n:quit" | stack repl
+echo ":main 2020 all\n:quit" | stack repl
 ```
 
 [aoc]: https://adventofcode.com

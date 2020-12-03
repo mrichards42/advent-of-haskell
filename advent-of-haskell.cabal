@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 4bd2b0e0abf20a03b6ea142d3c492378d81d1543eb2b252928a652c211518cb4
+-- hash: 2fbe3c707bbfac6453e32f7288cdead86206c9af9ed4aa6bceb378ee97fd69d2
 
 name:           advent-of-haskell
 version:        0.1.0.0
@@ -24,12 +24,13 @@ source-repository head
   type: git
   location: https://github.com/mrichards42/advent-of-haskell
 
-executable advent-2019
-  main-is: Advent/Y2019/Main.hs
+executable advent-of-haskell
+  main-is: Advent/Main.hs
   other-modules:
       Advent.Util.Challenge
       Advent.Util.CLI
       Advent.Util.Parsing
+      Advent.Y2019.Challenges
       Advent.Y2019.Day01
       Advent.Y2019.Day02
       Advent.Y2019.Day03
@@ -38,10 +39,11 @@ executable advent-2019
       Advent.Y2019.Day06
       Advent.Y2019.Day07
       Advent.Y2019.IntCode
+      Advent.Y2020.Challenges
       Paths_advent_of_haskell
   hs-source-dirs:
       src
-  ghc-options: -threaded -rtsopts -with-rtsopts=-N -Wall -main-is Advent.Y2019.Main
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N -Wall -main-is Advent.Main
   build-depends:
       base >=4.7 && <5
     , containers

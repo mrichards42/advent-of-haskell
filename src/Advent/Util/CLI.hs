@@ -1,22 +1,20 @@
 -- | Common CLI functions
-module Advent.Util.CLI (run, parseArgs, usage) where
+module Advent.Util.CLI (parseArgs, usage) where
 
-import Advent.Util.Challenge (Challenge(..), allChallenges, inputFile)
-import Advent.Util.Parsing (Parser, decimalInRange)
+import Advent.Util.Challenge (Challenge(..))
+import Advent.Util.Parsing (Parser, decimalInRange, decimalOneOf)
 import Data.Either (partitionEithers)
-import Data.Maybe (isJust)
+import Data.List (nub)
 import Data.Set (Set)
 import qualified Data.Set as Set
-import System.Environment (getArgs, getProgName)
-import System.TimeIt (timeIt)
 import Text.Megaparsec
 import Text.Megaparsec.Char
 
 
-usage :: Int -> String -> String
-usage year progName =
-  unlines [ "Usage: " ++ progName ++ " [all | dayXX... | dayXX.partYY...]"
-          , "Runs one or more " ++ show year ++ " Advent Of Code puzzles."
+usage :: String -> String
+usage progName =
+  unlines [ "Usage: " ++ progName ++ " year [all | dayXX... | dayXX.partYY...]"
+          , "Runs one or more Advent Of Code puzzles."
           ]
 
 -- This parsing code is almost certainly overkill, but I wanted to spend a
@@ -31,8 +29,8 @@ data ParseResult = ChallengeList [Challenge]
     * [Day]XX           (shorthand for both parts)
     * all               (shorthand for all defined challenges)
 -}
-pChallenge :: Parser ParseResult
-pChallenge = allParser <|> challengeParser
+pChallenge :: Int -> Parser ParseResult
+pChallenge year = allParser <|> challengeParser
   where
     allParser = do
       _ <- string' "all"
@@ -46,38 +44,33 @@ pChallenge = allParser <|> challengeParser
         _ <- optional (choice $ string' <$> ["part", "p"])
         decimalInRange 1 2
       case part of
-        Just n -> return $ ChallengeList [Challenge day n]
-        _ -> return $ ChallengeList [Challenge day 1, Challenge day 2]
+        Just n -> return $ ChallengeList [Challenge year day n]
+        _ -> return $ ChallengeList [Challenge year day 1, Challenge year day 2]
 
--- | CLI args parser
-parseArgs :: [Challenge] -> [String] -> Either [String] (Set Challenge)
-parseArgs knownChallenges args =
+pYear :: [Int] -> Parser Int
+pYear = decimalOneOf
+
+challengeYear :: Challenge -> Int
+challengeYear (Challenge y _ _) = y
+
+parseChallenges :: Int -> [Challenge] -> [String] -> Either [String] (Set Challenge)
+parseChallenges year allChallenges args =
   case partitionEithers result of
     ([], rights) -> Right $ Set.fromList $ concat rights
     (lefts, _) -> Left lefts
   where
-    result = [case parseMaybe pChallenge x of
-                Just AllChallenges -> Right knownChallenges
-                Just (ChallengeList cs) -> Right cs
-                Nothing -> Left $ "Invalid challenge syntax: " ++ x
-             | x <- args]
+    challengesInYear = filter ((== year) . challengeYear) allChallenges
+    result = map parse1 args
+    parse1 arg = case parseMaybe (pChallenge year) arg of
+                   Just AllChallenges -> Right challengesInYear
+                   Just (ChallengeList cs) -> Right cs
+                   Nothing -> Left $ "Invalid challenge syntax: " ++ arg
 
--- | The main entrypoint: run the CLI app for a given year
-run :: Int -> (Challenge -> Maybe (String -> String)) -> IO ()
-run year challengeFns = do
-  args <- getArgs
-  if null args
-     then getProgName >>= putStr . usage year
-     else case parseArgs knownChallenges args of
-            Left errors -> mapM_ putStrLn errors
-            Right challenges -> mapM_ run1 challenges
-  where
-    knownChallenges =
-      filter (isJust . challengeFns) allChallenges
-    run1 challenge =
-      case challengeFns challenge of
-        Just f -> do
-          print challenge
-          input <- readFile (inputFile year challenge)
-          timeIt $ putStr $ "  " ++ f input ++ "\n  "
-        Nothing -> putStrLn $ "<Unknown challenge: " ++ show challenge ++ ">"
+-- | CLI args parser
+parseArgs :: [Challenge] -> [String] -> Either [String] (Set Challenge)
+parseArgs allChallenges (yearArg:challengeArgs) =
+  case parseMaybe (pYear validYears) yearArg of
+    Nothing -> Left ["Expected year to be one of " ++ show validYears]
+    Just year -> parseChallenges year allChallenges challengeArgs
+  where validYears = nub $ map challengeYear allChallenges
+parseArgs _ [] = Left ["No args"]
