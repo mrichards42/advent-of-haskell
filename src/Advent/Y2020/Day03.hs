@@ -92,8 +92,8 @@ pRow = do
   row <- M.some (pTree M.<|> pOpen)
   _ <- M.optional M.newline
   return $ V.fromList row
-  where pTree = M.char '#' >> return Tree
-        pOpen = M.char '.' >> return Open
+  where pTree = Tree <$ M.char '#'
+        pOpen = Open <$ M.char '.'
 
 parseInput :: String -> Field
 parseInput = parseOrError (M.some pRow)
@@ -116,7 +116,7 @@ treesInPath pos (dx, dy) field@(row:_) =
 
 -- | >>> part1 example
 -- 7
--- >>> readFile "input/2020/day03.txt" >>= return . part1
+-- >>> part1 <$> readFile "input/2020/day03.txt"
 -- 171
 part1 :: String -> Int
 part1 = treesInPath 0 (3, 1) . parseInput
@@ -147,7 +147,7 @@ each of the listed slopes?
 
 -- | >>> part2 example
 -- 336
--- >>> readFile "input/2020/day03.txt" >>= return . part2
+-- >>> part2 <$> readFile "input/2020/day03.txt"
 -- 1206576000
 part2 :: String -> Int
 part2 input = product $ map (\slope -> treesInPath 0 slope field) slopes
