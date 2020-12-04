@@ -5,7 +5,7 @@ module Advent.Y2020.DayXX (part1, part2) where
 
 -}
 
--- | >>> readFile "input/2020/dayXX.txt" >>= return . part1
+-- | >>> part1 <$> readFile "input/2020/dayXX.txt"
 -- undefined
 part1 :: String -> Int
 part1 = undefined
@@ -15,7 +15,7 @@ part1 = undefined
 
 -}
 
--- | >>> readFile "input/2020/dayXX.txt" >>= return . part2
+-- | >>> part2 <$> readFile "input/2020/dayXX.txt"
 -- undefined
 part2 :: String -> Int
 part2 = undefined
