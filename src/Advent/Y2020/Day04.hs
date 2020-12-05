@@ -239,7 +239,7 @@ pValidPassport =
     pPair k pV = M.try $ (,) <$> M.string k <* M.char ':' <*> pV
 
     decParser :: Int -> Int -> Parser String
-    decParser x y = show <$> (P.decimalInRange x y :: Parser Int)
+    decParser x y = show <$> P.decimalInRange x y
 
 pInvalidPassport :: Parser ParseResult
 pInvalidPassport = Invalid <$> pPassport
