@@ -7,6 +7,7 @@ import qualified Data.Map as Map
 import qualified Advent.Y2020.Day01 as Day01
 import qualified Advent.Y2020.Day02 as Day02
 import qualified Advent.Y2020.Day03 as Day03
+import qualified Advent.Y2020.Day04 as Day04
 
 challenges :: ChallengeMap
 challenges =
@@ -16,4 +17,6 @@ challenges =
                           , (Challenge 2020 2 2, show . Day02.part2)
                           , (Challenge 2020 3 1, show . Day03.part1)
                           , (Challenge 2020 3 2, show . Day03.part2)
+                          , (Challenge 2020 4 1, show . Day04.part1)
+                          , (Challenge 2020 4 2, show . Day04.part2)
                           ]
