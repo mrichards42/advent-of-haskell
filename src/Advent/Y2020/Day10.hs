@@ -96,9 +96,7 @@ diffs (a:b:cs) = b - a : diffs (b:cs)
 freqs :: Ord a => [a] -> Map a Int
 freqs = foldl' accum Map.empty
   where accum m x = Map.alter update x m
-        update old = case old of
-                       Nothing -> Just 1
-                       Just n -> Just $ n + 1
+        update = Just . maybe 1 (+ 1)
 
 solve1 :: [Int] -> Int
 solve1 xs = let j = freqs $ diffs xs
@@ -232,7 +230,7 @@ listTheWays xs
                     b = last xs
                     mid = init $ tail xs
                 in filter valid [[a] ++ m ++ [b] | m <- subsequences mid]
-                where valid xs' = maximum (diffs xs') <= 3
+                where valid = (<= 3) . maximum . diffs
 
 countTheWays :: Int -> Int
 countTheWays groupLength = length $ listTheWays [1..groupLength]
