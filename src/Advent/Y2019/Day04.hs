@@ -30,8 +30,9 @@ these criteria?
 
 parseInput :: String -> (Int, Int)
 parseInput input =
-  let [a,b] = lines input
-  in (read a, read b)
+  case map read $ lines input of
+    [a, b] -> (a, b)
+    _ -> error "unexpected input format"
 
 toDigitList :: Int -> [Int]
 toDigitList x = case x `divMod` 10 of

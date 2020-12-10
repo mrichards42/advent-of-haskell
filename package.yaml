@@ -33,3 +33,5 @@ executables:
     - -rtsopts
     - -with-rtsopts=-N
     - -Wall
+    - -Wincomplete-patterns
+    - -Wincomplete-uni-patterns
