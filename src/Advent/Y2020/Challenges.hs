@@ -12,23 +12,29 @@ import qualified Advent.Y2020.Day05 as Day05
 import qualified Advent.Y2020.Day06 as Day06
 import qualified Advent.Y2020.Day07 as Day07
 import qualified Advent.Y2020.Day08 as Day08
+import qualified Advent.Y2020.Day09 as Day09
+import qualified Advent.Y2020.Day10 as Day10
 
 challenges :: ChallengeMap
 challenges =
-  Map.fromDistinctAscList [ (Challenge 2020 1 1, show . Day01.part1)
-                          , (Challenge 2020 1 2, show . Day01.part2)
-                          , (Challenge 2020 2 1, show . Day02.part1)
-                          , (Challenge 2020 2 2, show . Day02.part2)
-                          , (Challenge 2020 3 1, show . Day03.part1)
-                          , (Challenge 2020 3 2, show . Day03.part2)
-                          , (Challenge 2020 4 1, show . Day04.part1)
-                          , (Challenge 2020 4 2, show . Day04.part2)
-                          , (Challenge 2020 5 1, show . Day05.part1)
-                          , (Challenge 2020 5 2, show . Day05.part2)
-                          , (Challenge 2020 6 1, show . Day06.part1)
-                          , (Challenge 2020 6 2, show . Day06.part2)
-                          , (Challenge 2020 7 1, show . Day07.part1)
-                          , (Challenge 2020 7 2, show . Day07.part2)
-                          , (Challenge 2020 8 1, show . Day08.part1)
-                          , (Challenge 2020 8 2, show . Day08.part2)
+  Map.fromDistinctAscList [ (Challenge 2020  1 1, show . Day01.part1)
+                          , (Challenge 2020  1 2, show . Day01.part2)
+                          , (Challenge 2020  2 1, show . Day02.part1)
+                          , (Challenge 2020  2 2, show . Day02.part2)
+                          , (Challenge 2020  3 1, show . Day03.part1)
+                          , (Challenge 2020  3 2, show . Day03.part2)
+                          , (Challenge 2020  4 1, show . Day04.part1)
+                          , (Challenge 2020  4 2, show . Day04.part2)
+                          , (Challenge 2020  5 1, show . Day05.part1)
+                          , (Challenge 2020  5 2, show . Day05.part2)
+                          , (Challenge 2020  6 1, show . Day06.part1)
+                          , (Challenge 2020  6 2, show . Day06.part2)
+                          , (Challenge 2020  7 1, show . Day07.part1)
+                          , (Challenge 2020  7 2, show . Day07.part2)
+                          , (Challenge 2020  8 1, show . Day08.part1)
+                          , (Challenge 2020  8 2, show . Day08.part2)
+                          , (Challenge 2020  9 1, show . Day09.part1)
+                          , (Challenge 2020  9 2, show . Day09.part2)
+                          , (Challenge 2020 10 1, show . Day10.part1)
+                          , (Challenge 2020 10 2, show . Day10.part2)
                           ]
