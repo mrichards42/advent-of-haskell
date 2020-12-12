@@ -3,8 +3,8 @@ module Advent.Y2020.Day11 (part1, part2) where
 
 import Advent.Util.Parsing (Parser, parseOrError)
 import Data.Map (Map)
-import Data.Maybe (catMaybes)
 import qualified Data.Map as Map
+import Data.Maybe (catMaybes, mapMaybe)
 import qualified Text.Megaparsec as M
 import qualified Text.Megaparsec.Char as M
 
@@ -121,6 +121,9 @@ seats change state. How many seats end up occupied?
 
 -}
 
+-- Parsing --
+-- TODO: think about extracting this into a Grid module
+
 data Seat = Occupied | Unoccupied | Floor
   deriving (Eq)
 type Point = (Int, Int)
@@ -152,26 +155,11 @@ pGrid = toGrid <$> M.some pSeat `M.sepEndBy1` M.newline
 parseInput :: String -> SeatGrid
 parseInput = parseOrError pGrid
 
-neighborCount :: SeatGrid -> Point -> Int
-neighborCount g (x, y) =
-  length $ filter (== Just Occupied) $ map (g Map.!?) neighborPoints
-  where neighborPoints = [ (x + dx, y + dy) | dx <- [-1..1]
-                                            , dy <- [-1..1]
-                                            , (dx, dy) /= (0, 0)
-                                            ]
 
-seatStep :: SeatGrid -> Point -> Seat -> Seat
-seatStep g p Occupied
-  | neighborCount g p >= 4 = Unoccupied
-  | otherwise              = Occupied
-seatStep g p Unoccupied
-  | neighborCount g p == 0 = Occupied
-  | otherwise              = Unoccupied
-seatStep _ _ Floor = Floor
+-- Common machinery --
 
-gridStep :: SeatGrid -> SeatGrid
-gridStep g = Map.mapWithKey (seatStep g) g
-
+-- | Finds a fixed point of function `f` for input `x`, i.e. iterates until the
+-- input equals the output.
 fixedPoint :: Eq a => (a -> a) -> a -> a
 fixedPoint f x =
   let x' = f x
@@ -179,12 +167,54 @@ fixedPoint f x =
        then x'
        else fixedPoint f x'
 
+-- | Memoizes a "neighbors" function (Grid -> Point -> neighbors) and a Grid,
+-- returning a new function of just (Point -> neighbors)
+neighborsMemo :: (Grid a -> Point -> [Point]) -> Grid a -> (Point -> [Point])
+neighborsMemo neighbors grid =
+  let neighborMap = Map.mapWithKey (\k _ -> neighbors grid k) grid
+  -- Return a lambda so that `neighborMap` is part of the closure. Otherwise
+  -- this seems to evaluate `neighbors` each time (which is the expensive part)
+  in \pt -> Map.findWithDefault [] pt neighborMap
+
+-- | Returns the number of neighbor seats that are currently Occupied
+neighborCount :: (Point -> [Point]) -> SeatGrid -> Point -> Int
+neighborCount neighbors g pt =
+  length $ filter (== Occupied) $ lookups g (neighbors pt)
+  where lookups m = mapMaybe (m Map.!?)
+
+-- | Transforms a grid using the given rule function
+gridStep :: (Grid a -> Point -> a -> a) -> Grid a -> Grid a
+gridStep ruleFn grid = Map.mapWithKey (ruleFn grid) grid
+
+
+-- Part 1 specific functions --
+
+neighbors1 :: Grid a -> Point -> [Point]
+neighbors1 g (x, y) =
+  filter (`Map.member` g) [ (x + dx, y + dy) | dx <- [-1..1]
+                                             , dy <- [-1..1]
+                                             , (dx, dy) /= (0, 0) ]
+
+seatRule1 :: (Point -> [Point]) -> SeatGrid -> Point -> Seat -> Seat
+seatRule1 _ _ _ Floor = Floor
+seatRule1 neighbors g pt seat
+  | seat == Occupied   && occupiedNeighbors >= 4 = Unoccupied
+  | seat == Unoccupied && occupiedNeighbors == 0 = Occupied
+  | otherwise                                    = seat
+  where occupiedNeighbors = neighborCount neighbors g pt
+
 -- | >>> part1 "L.LL.LL.LL\nLLLLLLL.LL\nL.L.L..L..\nLLLL.LL.LL\nL.LL.LL.LL\nL.LLLLL.LL\n..L.L.....\nLLLLLLLLLL\nL.LLLLLL.L\nL.LLLLL.LL"
 -- 37
 -- >>> part1 <$> readFile "input/2020/day11.txt"
 -- 2441
 part1 :: String -> Int
-part1 = length . filter (== Occupied) . Map.elems . fixedPoint gridStep . parseInput
+part1 input =
+  let seats = parseInput input
+      rule = seatRule1 $ neighborsMemo neighbors1 seats
+  in length
+   $ filter (== Occupied)
+   $ Map.elems
+   $ fixedPoint (gridStep rule) seats
 
 
 {- Part 2
@@ -318,13 +348,11 @@ empty, once equilibrium is reached, how many seats end up occupied?
 
 -}
 
-
-neighborPoints2 :: SeatGrid -> Point -> [Point]
-neighborPoints2 g pt =
+neighbors2 :: SeatGrid -> Point -> [Point]
+neighbors2 g pt =
   catMaybes [ nextPt pt (dx, dy) | dx <- [-1..1]
-                                   , dy <- [-1..1]
-                                   , (dx, dy) /= (0, 0)
-                                   ]
+                                 , dy <- [-1..1]
+                                 , (dx, dy) /= (0, 0) ]
   where nextPt :: Point -> Point -> Maybe Point
         nextPt (x, y) (dx, dy) =
           let pt' = (x + dx, y + dy)
@@ -333,27 +361,14 @@ neighborPoints2 g pt =
                Just Floor -> nextPt pt' (dx, dy)
                _          -> Just pt'
 
-neighborsGrid2 :: SeatGrid -> Grid [Point]
-neighborsGrid2 g = Map.mapWithKey f g
-  where f p _ = neighborPoints2 g p
 
-neighbors2 :: Grid [Point] -> (Point -> [Point])
-neighbors2 = flip $ Map.findWithDefault []
-
-neighborCount' :: (Point -> [Point]) -> SeatGrid -> Point -> Int
-neighborCount' f g pt = length . filter (== Occupied) $ map (g Map.!) (f pt)
-
-seatStep2 :: (Point -> [Point]) -> SeatGrid -> Point -> Seat -> Seat
-seatStep2 f g pt Occupied
-  | neighborCount' f g pt >= 5 = Unoccupied
-  | otherwise              = Occupied
-seatStep2 f g pt Unoccupied
-  | neighborCount' f g pt == 0 = Occupied
-  | otherwise                 = Unoccupied
-seatStep2 _ _ _ Floor = Floor
-
-gridStep2 :: (SeatGrid -> Point -> Seat -> Seat) -> SeatGrid -> SeatGrid
-gridStep2 f gs = Map.mapWithKey (f gs) gs
+seatRule2 :: (Point -> [Point]) -> SeatGrid -> Point -> Seat -> Seat
+seatRule2 _ _ _ Floor = Floor
+seatRule2 neighbors g pt seat
+  | seat == Occupied   && occupiedNeighbors >= 5 = Unoccupied
+  | seat == Unoccupied && occupiedNeighbors == 0 = Occupied
+  | otherwise                                    = seat
+  where occupiedNeighbors = neighborCount neighbors g pt
 
 -- | >>> part2 "L.LL.LL.LL\nLLLLLLL.LL\nL.L.L..L..\nLLLL.LL.LL\nL.LL.LL.LL\nL.LLLLL.LL\n..L.L.....\nLLLLLLLLLL\nL.LLLLLL.L\nL.LLLLL.LL"
 -- 26
@@ -362,8 +377,8 @@ gridStep2 f gs = Map.mapWithKey (f gs) gs
 part2 :: String -> Int
 part2 input =
   let seats = parseInput input
-      neighbors = neighborsGrid2 seats
+      rule = seatRule2 $ neighborsMemo neighbors2 seats
   in length
    $ filter (== Occupied)
    $ Map.elems
-   $ fixedPoint (gridStep2 $ seatStep2 $ neighbors2 neighbors) seats
+   $ fixedPoint (gridStep rule) seats
