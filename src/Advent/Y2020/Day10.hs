@@ -250,3 +250,14 @@ solve2 = product . map groupWays . group . diffs
 -- 48358655787008
 part2 :: String -> Int
 part2 = solve2 . parseInput
+
+
+-- The dynamic programming way: starting with the highest adapter and working
+-- backwards, count the cumulative number of ways that each jump of 1, 2, or 3
+-- can be made.
+_solve2' :: [Int] -> Int
+_solve2' xs = counts Map.! 0
+  where counts = foldl' count1 Map.empty (reverse xs)
+        count1 m x = let f n = Map.findWithDefault 0 (x + n) m
+                         v = sum $ map f [1..3]
+                     in Map.insert x (max 1 v) m
