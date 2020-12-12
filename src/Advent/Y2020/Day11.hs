@@ -2,11 +2,13 @@
 module Advent.Y2020.Day11 (part1, part2) where
 
 import Advent.Util.Parsing (Parser, parseOrError)
-import Data.Map (Map)
-import qualified Data.Map as Map
+import Data.HashMap.Strict (HashMap)
+import qualified Data.HashMap.Strict as Map
 import Data.Maybe (catMaybes, mapMaybe)
 import qualified Text.Megaparsec as M
 import qualified Text.Megaparsec.Char as M
+
+type Map = HashMap
 
 {- Part 1
 

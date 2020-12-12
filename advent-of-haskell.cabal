@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 4a51263e01eca259adbe6551e5cbb68495137afb3eb1876524853499d8936e4e
+-- hash: 88300ae28510e0a5dcbc24aad3df06a0f1d3adcab0f09373e78504cc83dda9d2
 
 name:           advent-of-haskell
 version:        0.1.0.0
@@ -62,5 +62,6 @@ executable advent-of-haskell
     , containers
     , megaparsec
     , timeit
+    , unordered-containers >=0.2.13.0
     , vector
   default-language: Haskell2010
