@@ -19,6 +19,7 @@ description:         Please see the README on GitHub at <https://github.com/mric
 
 dependencies:
 - base >= 4.7 && < 5
+- arithmoi
 - containers
 - unordered-containers >= 0.2.13.0
 - megaparsec

@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 88300ae28510e0a5dcbc24aad3df06a0f1d3adcab0f09373e78504cc83dda9d2
+-- hash: 21d990b9df0872a769f1108893b1b3710ddf7c58e16eecd18a069f03f825a4b3
 
 name:           advent-of-haskell
 version:        0.1.0.0
@@ -52,13 +52,16 @@ executable advent-of-haskell
       Advent.Y2020.Day09
       Advent.Y2020.Day10
       Advent.Y2020.Day11
+      Advent.Y2020.Day12
+      Advent.Y2020.Day13
       Advent.Y2020.DayXX
       Paths_advent_of_haskell
   hs-source-dirs:
       src
   ghc-options: -threaded -rtsopts -with-rtsopts=-N -Wall -Wincomplete-patterns -Wincomplete-uni-patterns -main-is Advent.Main
   build-depends:
-      base >=4.7 && <5
+      arithmoi
+    , base >=4.7 && <5
     , containers
     , megaparsec
     , timeit

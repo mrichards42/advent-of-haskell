@@ -15,6 +15,8 @@ import qualified Advent.Y2020.Day08 as Day08
 import qualified Advent.Y2020.Day09 as Day09
 import qualified Advent.Y2020.Day10 as Day10
 import qualified Advent.Y2020.Day11 as Day11
+import qualified Advent.Y2020.Day12 as Day12
+import qualified Advent.Y2020.Day13 as Day13
 
 challenges :: ChallengeMap
 challenges =
@@ -40,4 +42,8 @@ challenges =
                           , (Challenge 2020 10 2, show . Day10.part2)
                           , (Challenge 2020 11 1, show . Day11.part1)
                           , (Challenge 2020 11 2, show . Day11.part2)
+                          , (Challenge 2020 12 1, show . Day12.part1)
+                          , (Challenge 2020 12 2, show . Day12.part2)
+                          , (Challenge 2020 13 1, show . Day13.part1)
+                          , (Challenge 2020 13 2, show . Day13.part2)
                           ]
