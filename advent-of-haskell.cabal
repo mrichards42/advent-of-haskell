@@ -29,6 +29,7 @@ executable advent-of-haskell
   other-modules:
       Advent.Util.Challenge
       Advent.Util.CLI
+      Advent.Util.Function
       Advent.Util.Parsing
       Advent.Y2019.Challenges
       Advent.Y2019.Day01

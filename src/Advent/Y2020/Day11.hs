@@ -2,6 +2,7 @@
 module Advent.Y2020.Day11 (part1, part2) where
 
 import Advent.Util.Parsing (Parser, parseOrError)
+import Advent.Util.Function (fixedPoint)
 import Data.HashMap.Strict (HashMap)
 import qualified Data.HashMap.Strict as Map
 import Data.Maybe (catMaybes, mapMaybe)
@@ -159,15 +160,6 @@ parseInput = parseOrError pGrid
 
 
 -- Common machinery --
-
--- | Finds a fixed point of function `f` for input `x`, i.e. iterates until the
--- input equals the output.
-fixedPoint :: Eq a => (a -> a) -> a -> a
-fixedPoint f x =
-  let x' = f x
-  in if x == x'
-       then x'
-       else fixedPoint f x'
 
 -- | Memoizes a "neighbors" function (Grid -> Point -> neighbors) and a Grid,
 -- returning a new function of just (Point -> neighbors)
