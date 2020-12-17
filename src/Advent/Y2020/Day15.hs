@@ -62,10 +62,10 @@ runTurns turns game
                 in runTurns (turns - 1) game'
   | otherwise = game
 
--- TODO: This is very slow (~90s), maybe use a Vector instead of a Map?
+-- TODO: This is very slow (~120s), maybe use a Vector instead of a Map?
 
 -- | >>> part2 <$> readFile "input/2020/day15.txt"
--- undefined
+-- 9007186
 part2 :: String -> Int
 part2 input =
   let seed = parseInput input
