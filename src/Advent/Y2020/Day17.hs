@@ -131,7 +131,7 @@ gridStep :: Ord k
          -> (Grid k, Set k)             -- (output grid, changed points)
 gridStep neighbors rule (g, changed) = (Map.union g' g, Map.keysSet g')
   where
-    pts = Set.toList $ Set.fromList $ concatMap neighbors changed
+    pts = Set.toList . Set.union changed . Set.fromList $ concatMap neighbors changed
     g' = Map.fromList $ mapMaybe stepFn pts
 
     stepFn pt = (pt, ) <$> rule v neighborCount

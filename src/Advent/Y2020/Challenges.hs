@@ -27,6 +27,7 @@ import qualified Advent.Y2020.Day20 as Day20
 import qualified Advent.Y2020.Day21 as Day21
 import qualified Advent.Y2020.Day22 as Day22
 import qualified Advent.Y2020.Day23 as Day23
+import qualified Advent.Y2020.Day24 as Day24
 
 challenges :: ChallengeMap
 challenges =
@@ -76,4 +77,6 @@ challenges =
                           , (Challenge 2020 22 2, show . Day22.part2)
                           , (Challenge 2020 23 1, show . Day23.part1)
                           , (Challenge 2020 23 2, show . Day23.part2)
+                          , (Challenge 2020 24 1, show . Day24.part1)
+                          , (Challenge 2020 24 2, show . Day24.part2)
                           ]
