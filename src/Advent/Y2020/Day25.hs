@@ -3,6 +3,8 @@
 {- Combo Breaker -}
 module Advent.Y2020.Day25 (part1) where
 
+import Data.List (iterate')
+
 {- Part 1
 
 You finally reach the check-in desk. Unfortunately, their registration systems
@@ -93,13 +95,7 @@ parseInput input = case map read . take 2 . lines $ input of
                      _ -> error "oops"
 
 exptSeq :: Int -> [Int]
-exptSeq n = iterate (\x -> x * n `mod` 20201227) 1
-
--- there are too many iterations to use exptSeq, so make this a strict loop
-solve :: Int -> Int -> Int -> Int
-solve 0 _ x = x
-solve times n x = let !x' = (x * n) `mod` 20201227
-                  in solve (times - 1) n x'
+exptSeq n = iterate' (\x -> x * n `mod` 20201227) 1
 
 -- | >>> part1 "5764801\n17807724"
 -- 14897079
@@ -109,7 +105,7 @@ part1 :: String -> Int
 part1 input =
   let (cardKey, doorKey) = parseInput input
       !loopCount = length . takeWhile (/= cardKey) $ exptSeq 7
-  in solve loopCount doorKey 1
+  in exptSeq doorKey !! loopCount
 
 
 {- Part 2
